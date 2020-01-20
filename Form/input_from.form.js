@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInput, View, Text } from 'react-native'
 
-const Input = ({ placeholder, ...rest }) => {
+const Input = ({ placeholder, error, name, ...rest }) => {
     return (
         <View>
             <TextInput
@@ -9,6 +9,7 @@ const Input = ({ placeholder, ...rest }) => {
                 name={placeholder}
                 {...rest}
             />
+            {error && <Text>{error}</Text>}
         </View>
     );
 }
