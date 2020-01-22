@@ -1,6 +1,11 @@
 const { check } = require("express-validator");
 
 exports.create = [
-  check("email").isEmail(),
-  check("password").isLength({ min: 5 })
+  check("email")
+    .exists()
+    .isEmail(),
+  check("password")
+    .exists()
+    .isAlphanumeric()
+    .isLength({ min: 6 })
 ];
