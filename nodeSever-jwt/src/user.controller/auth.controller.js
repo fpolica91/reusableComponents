@@ -5,6 +5,12 @@ const authConfig = require("../config/auth.json");
 
 const { validationResult } = require("express-validator");
 
+function generateToken(params = {}) {
+  return jwt.sign(params, authConfig.secret, {
+    expiresIn: 86400
+  });
+}
+
 module.exports = {
   async create(req, res) {
     const errors = validationResult(req);
@@ -19,26 +25,24 @@ module.exports = {
         password: encrypted
       });
     }
-    return res.json(user);
+    return res.json({
+      user,
+      token: generateToken({ id: user.id })
+    });
   },
 
   async authenticate(req, res) {
     const { email, password } = req.body;
     let user = await User.findOne({ email }).select("+password");
     if (!user) return res.json({ message: "user not found" });
-    if (!(await bcrypt.compare(password, user.password))) {
+    if (!(await bcrypt.compare(password, user.password)))
       res.json({ message: "Wrong password" });
-    }
 
     user.password = undefined;
 
-    const token = jwt.sign({ id: user.id }, authConfig.secret, {
-      expiresIn: 86400
-    });
-
     res.json({
       user: user,
-      token: token
+      token: generateToken({ id: user.id })
     });
   }
 };
