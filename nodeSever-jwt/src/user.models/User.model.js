@@ -14,6 +14,14 @@ const userSchema = new Schema({
     minlength: 6,
     select: false,
     required: true
+  },
+  passwordResetToken: {
+    type: String,
+    select: false
+  },
+  passwordResetExpires: {
+    type: Date,
+    default: Date.now
   }
 });
 

@@ -7,6 +7,8 @@ const router = Router();
 
 router.post("/register", validator.create, UserController.create);
 router.post("/login", UserController.authenticate);
+router.post("/forgot_password", UserActionController.forgot);
+router.post("/recover", UserActionController.resetPassword);
 
 router.use(authMiddleware);
 router.use(authMiddleware).get("/test", UserActionController.action);
